@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/css.css">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+
+    <title>Login - Vacina Brasil!</title>
+</head>
+
+<body>
+    <header>
+        <img id="cabecalho" src="img/head-vacina-br.png" alt="cabeçalho de vacina-br">
+    </header>
+
+    <div id="CMV">
+        <h2>CADASTRO MUNICIPAL DE VACINAÇÃO</h2>
+    </div>
+
+    <div class="formulario">
+        <h3 class="login">LOGIN</h3>
+        <form>
+            <input type="cpf" name="cpf" laceholder="CPF">
+            <input class="acesso" type="submit" placeholder="ACESSAR" value="ACESSAR">
+            <a class="cadastrar" href="cadastrar.php">Ainda não possui cadastro? <b>CADASTRE-SE</b></a>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+    <script>
+        $("form").submit(function (event) {
+            $.LoadingOverlay("show");
+
+            const formData = { cpf: $('[name="cpf"]').val() };
+
+            $.ajax({
+                type: "POST",
+                url: "https://vacinabrasil.herokuapp.com/api/login",
+                data: formData,
+                dataType: "json",
+                encode: true,
+            }).done(function (response) {
+                localStorage.setItem('token', `${response.data.token}`);
+                window.location.replace("./agendamento.html");
+            }).fail(function () {
+                alert("CPF não cadastrado");
+                window.location.replace("./cadastrar.html");
+            })
+
+            $.LoadingOverlay("hide");
+            event.preventDefault();
+        });
+    </script>
+</body>
+
+</html>

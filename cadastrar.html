@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/css.css">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+
+    <title>Cadastrar - Vacina Brasil!</title>
+</head>
+
+<body>
+    <header>
+        <img id="cabecalho" src="img/head-vacina-br.png" alt="cabeçalho de vacina-br">
+    </header>
+
+    <div id="CMV">
+        <h2>CADASTRO MUNICIPAL DE VACINAÇÃO</h2>
+    </div>
+
+    <div class="formulario-cad">
+        <h3 class="login">CADASTRO</h3>
+        <h5>Preencha corretamente os dados abaixo, você ira utilizá-los para acesso e conferencia do satus de
+            agendamento.</h5>
+        <p>
+        <h6>Obs.: Itens marcados com <strong>*</strong> são de preenchimento obrigatório!</h6>
+        </p>
+        <form id="cadastro">
+            <div class="info-div">
+                <div class="info-cad">
+                    <label for="nome">Nome * </label>
+                    <input type="text" name="nome" placeholder="Nome Completo" maxlength="50">
+                    <label for="nome">Telefone * </label>
+                    <input type="tel" name="telefone" placeholder="Telefone" maxlength="12">
+                    <label for="nome">CPF * </label>
+                    <input type="cpf" name="cpf" placeholder="CPF" maxlength="11">
+                    <label for="nome">Data de Nascimento </label>
+                    <input type="date" name="nascimento" placeholder="Data de Nascimento" maxlength="9">
+                    <label for="nome">E-mail </label>
+                    <input type="email" name="email" placeholder="E-mail" maxlength="20">
+                </div>
+                <div class="info-cad">
+                    <label for="nome">CEP </label>
+                    <input type="text" name="cep" placeholder="CEP" maxlength="8">
+                    <label for="nome">Rua </label>
+                    <input type="text" name="rua" placeholder="Rua" maxlength="50">
+                    <label for="nome">Número </label>
+                    <input type="number" name="numero" placeholder="Número" maxlength="5">
+                    <label for="nome">Bairro</label>
+                    <input type="text" name="bairro" placeholder="Bairro" maxlength="30">
+                    <label for="nome">Cidade</label>
+                    <input type="text" name="cidade" placeholder="Cidade" maxlength="30">
+                </div>
+            </div>
+            <input type="submit" placeholder="CADASTRAR" value="CADASTRAR">
+            <a id="go-back" href="index.html"> <b>Voltar</b></a>
+        </form>
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+    <script>
+        $("form").submit(function (event) {
+            $.LoadingOverlay("show");
+
+            const formData = {
+                cpf: $('[name="cpf"]').val(),
+                name: $('[name="nome"]').val(),
+                phone_number: $('[name="telefone"]').val(),
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "https://vacinabrasil.herokuapp.com/api/register",
+                data: formData,
+                dataType: "json",
+                encode: true,
+            }).done(function (response) {
+                localStorage.setItem('token', `${response.data.token}`);
+                window.location.replace("./agendamento.html");
+            }).fail(function () {
+                alert("Verifique os campos do formulário.");
+            })
+            
+            $.LoadingOverlay("hide");
+            event.preventDefault();
+        });
+    </script>
+</body>
+
+</html>
